@@ -1,0 +1,241 @@
+METE — PITCH SCRIPT (2 speakers, ~3 minutes)
+
+Both presenters are named Yuval — labeled SPEAKER 1 / SPEAKER 2 here for clarity.
+Text in (parentheses) is a stage cue — don't say it out loud.
+SPEAKER 1: Phases 1-2 (the problem + the live demo). Drives the laptop.
+SPEAKER 2: Phases 3-4 (the proof + the moat + close). Takes the laptop at the HANDOFF.
+
+
+====================================================================
+INTRO — BOTH SPEAKERS  (about 0:00-0:10)
+====================================================================
+
+SPEAKER 1:  Hi, I'm Yuval —
+
+SPEAKER 2:  — and I'm Yuval —
+
+SPEAKER 1:  — and we built Mete.
+
+
+====================================================================
+SPEAKER 1
+====================================================================
+
+PHASE 1 — THE HOOK & THE PROBLEM  (about 0:10-0:50)
+
+Picture one operator at a forward edge node. One 3D printer. A finite pile of
+carbon-fiber filament, a few printer-hours, and a tank of generator fuel —
+already rationed, because resupply is days out. And a mission to cover tonight,
+before the window closes.
+
+The decision that owns their night isn't which design to pull off a shelf. It's
+what do I build from this pile — and how many? Spend a gram, an hour, a watt on
+the wrong airframe, and it's gone before the mission even starts.
+
+Right now, that call is a whiteboard guess. And in an era drowning in AI hype,
+here's the part everyone misses: you cannot hand this decision to a model that
+guesses. A hallucination — or one quiet math error — at the tactical edge
+doesn't waste a spool of filament. It loses the mission, and it can cost lives.
+The edge doesn't need an AI oracle. It needs absolute, deterministic truth.
+
+
+PHASE 2 — THE PRODUCT & THE STAGE WOW  (about 0:50-1:45)
+
+Mete is a fully offline, deterministic decision engine, powered by Google's
+CP-SAT solver. It takes the hard physical constraints and the live mission
+profile, and returns the mathematically optimal build plan — in under a second,
+on this laptop, with the network off.
+
+Let me show you. (point to screen) Right now, for a wide-area reconnaissance
+mission under tight fuel and feedstock, Mete says: build five small Scout
+drones — and it can't reach a sixth, because the filament binds.
+
+Watch what happens when I change the reality on the ground. (swap the mission
+to DEEP STRIKE: one hardened target, 120 km out) Now the mission is a single
+hardened, high-value target, a hundred and twenty kilometers out. (it re-solves
+live) The five Scouts dissolve — and one heavy Strike-L snaps into place. The
+binding constraint flips to Range. Same printer, same two kilos of filament —
+but the math just reallocated every gram to fit the mission, before we burned
+an ounce.
+
+And this is not a canned animation. (reframe the target to a light sensor —
+payload 90 g — and slide the keyboard to a judge) You type the standoff. Any
+number — one kilometer, a hundred and fifty. (judge types; it solves live)
+Closer in, it picks the cheapest airframe that works; farther out, it steps up
+a tier; past what the catalog can reach, it tells you so. You typed that — I
+didn't. It's a deterministic solver, offline, on this machine.
+
+One last poke. (ration the energy below a Strike's draw) Cut the generator fuel
+below what a Strike needs, and Mete refuses to fake an answer. It says cannot
+build tonight — recommend resupply, and tells you exactly how short you are. It
+will not show you a green light it can't back up.
+
+>>> HANDOFF — (step back; SPEAKER 2 takes the laptop)
+And that refusal is the whole point. [the other Yuval] will show you why.
+
+
+====================================================================
+SPEAKER 2
+====================================================================
+
+PHASE 3 — THE GENERALIST PROOF  (about 1:45-2:15)
+
+Thanks. To prove this isn't a drone toy — (toggle to Repair Mode) — same
+engine, no new math. When battle-damaged assets come back to the node, Mete
+triages a catalog of real structural stock numbers and buckets every part into
+Print Now, Defer, or Route to Safety Review — based on the material actually on
+hand. It refuses to guess, and it refuses to print a safety-critical part on a
+green light it didn't earn. The generality isn't a slide. It's a tab.
+
+
+PHASE 4 — THE SCALE & THE MOSA MOAT  (about 2:15-3:00)
+
+Our wedge is the edge operator tonight. But the destination is the decision OS
+for the entire distributed defense manufacturing network — the logistics
+officer across nodes, the commander at echelon, the depot at industrial scale.
+
+And here is the moat. As the battlefield floods with multi-vendor, 3D-printed
+munitions, swarms, and components, the bottleneck moves from manufacturing the
+hardware to configuring it — securely. Mete is engineered to become the secure
+orchestration hub for MOSA — Modular Open Systems — technologies. By housing
+the cryptographic blueprint files and weapon-configuration payloads locally,
+Mete sandboxes the data pipeline: when a third-party sensor profile or a custom
+G-code file is pulled down offline, it is authenticated, tamper-proof, and
+hardened against adversarial attack before it ever touches a printer — or an
+aircraft's brain.
+
+xCell-class containers move the hardware to the fight. Mete delivers the
+uncorrupted truth of what to build. Thank you.
+
+
+====================================================================
+Q&A AMMO — PLAIN-ENGLISH ANSWERS (say these in your own voice)
+====================================================================
+
+Tip: lead with the FIRST line of each answer — it's the whole point in one
+sentence. Only go deeper if they lean in. These are notes, not a teleprompter.
+
+
+--- IF THEY ASK ABOUT THE MATH / "HOW DOES IT ACTUALLY WORK?" ---
+
+The simple version (say this first):
+  It's an optimizer. We give it three things: what each drone needs to do the
+  job — range, payload, how much wind it can handle; what each drone costs to
+  print — grams of filament, printer-hours, watts; and what we actually have on
+  hand tonight. It finds the plan that covers the most mission value for the
+  least material, without ever breaking a hard limit.
+
+The honesty rule that makes it credible (say this next if they're nodding):
+  Two rules keep it honest. One — a drone can only cover a target if it clears
+  every requirement. That's a yes/no gate, not a score, so it never picks the
+  big expensive drone just because it looks better; the big one only wins when
+  it's the only one that can reach. Two — when two plans tie, we break the tie
+  the exact same way every time, so the same inputs always give the same answer.
+
+If they push for the real machinery:
+  Under the hood it's an integer program — every decision is a 1 or a 0, "build
+  this drone for this target, or don't" — and we solve it with Google's CP-SAT,
+  the same solver class used for real logistics scheduling. We convert every
+  number to whole integers so there's no floating-point fuzz, and we run it
+  single-threaded with a fixed seed. That's why it's reproducible to the byte.
+  With three drone types and a handful of targets it solves in well under a
+  millisecond, so it can't choke on a number a judge throws at it.
+
+
+--- "WHY NOT JUST USE AI / AN LLM FOR THIS?" ---
+  We're not anti-AI — AI is great for reading the situation, like turning a
+  sentence into a mission profile. But you should never let it make the
+  decision. An LLM guesses, and it can't promise you the same answer twice. At
+  the edge, a wrong number doesn't waste filament — it loses the mission. So we
+  use math you can check, that gives the same answer every time, instead of a
+  model you have to hope is right.
+
+
+--- "DID YOU FAKE THE DEMO?" ---
+  No — you just typed a number we'd never seen and it solved. The wifi's off, so
+  there's no server doing it behind the scenes. It's a real solver running on
+  this laptop. Same input, same answer, every time — we even threw a thousand
+  weird inputs at it to make sure it never flinches.
+
+
+--- "ARE THOSE NUMBERS REAL?" ---
+  They're cited — payload to the DoD Group-1 weight class, energy to real
+  battery numbers — and every single one is editable. We're not claiming we know
+  your exact catalog; we're giving you a starting point you can correct. Change
+  any number and watch it re-solve. It's a frontier, not an oracle.
+
+
+--- "DOESN'T A SLICER ALREADY DO THIS?" ---
+  A slicer plans how to print one part you already picked — the toolpath. We
+  decide what to build and how many, across the whole fleet, when all your
+  budgets are fighting each other. That five-to-one flip is a call a slicer
+  never makes.
+
+
+--- "IS THIS A COMPANY, OR JUST A FEATURE?" ---
+  The optimizer is the wedge — it's how we get in the door. The company is what
+  it becomes: the secure layer that decides and verifies what every node builds
+  across the whole network. Plus the mission-value data piles up over time and
+  gets more valuable. That's infrastructure, not a feature.
+
+
+--- "WHAT STOPS A PRIME — OR FIRESTORM — FROM JUST BUILDING THIS?" ---
+  Three things. It's deterministic and offline, which is hard to get right and
+  we already did — we found and killed the one bug that breaks it. The model is
+  cited and editable, so each customer tunes it to their own catalog and that
+  data locks them in. And the real moat is the MOSA piece: becoming the trusted,
+  tamper-proof gate every config file passes through before it touches a printer.
+
+
+--- "WHO'S THE CUSTOMER? WHO PAYS?" ---
+  Day one, it ships as the software brain inside expeditionary manufacturing
+  kits — the people already moving printers to the edge, like FireStorm's xCell.
+  We're the decision layer that makes that hardware actually useful at 2 a.m.
+  when no one can call home.
+
+
+--- "WHAT'S REAL TODAY VS. THE BIG MOSA VISION?" ---
+  Everything we just showed is real and running offline right now — the
+  optimizer, the live re-solve you drove, the resupply refusal, and Repair mode.
+  The secure MOSA config hub is the roadmap — that's where the funding goes.
+  We're being straight about that line on purpose.
+
+
+--- "DOES IT SCALE?" ---
+  Today it's tiny and instant on purpose — three drone types, a handful of
+  targets, sub-millisecond. The exact same math scales to more types, more
+  targets, and more nodes; this class of solver runs far bigger problems in
+  industry every day. We kept the demo small so it's provably correct, not
+  because it can't grow.
+
+
+--- "WHAT IF SOMEONE FEEDS IT GARBAGE / A BAD FILE?" ---
+  It rejects a malformed request at the door before the solver ever sees it. And
+  the weird-but-valid stuff — a zero print speed, a negative cost — fails
+  cleanly with a clear reason instead of crashing or lying. We tested over a
+  thousand of those.
+
+
+====================================================================
+STAGE-ACCURACY NOTES — READ BEFORE REHEARSING (don't say these)
+====================================================================
+
+1. The flip is a MISSION SWAP, not a raw standoff bump. Use the DEEP STRIKE
+   preset (one target, 120 km) to get the clean 5 Scouts -> 1 Strike-L, binding
+   = RANGE. Bumping standoff on the 8-target recon mission would build 1 Strike
+   and leave 7 uncovered — so the binding reason would read FEEDSTOCK, not
+   RANGE, and muddy the moment. Swap the mission; keep 120 km.
+
+2. The "type any number" beat works on a SINGLE reframed target (payload dropped
+   to ~90 g so only standoff decides the tier). That setup makes every value
+   land cleanly: 5 km or less -> Scout, 6-30 -> ISR, 31-120 -> Strike, over 120
+   -> "cannot reach."
+
+3. The MOSA / cyber moat is VISION, not shipped. Phase 4's wording ("engineered
+   to become," "the destination") keeps it honest — don't let it slip into
+   present tense. What is live and demoable today: the build optimizer, the
+   unscripted re-solve, the energy refusal, and Repair mode.
+
+4. "In under a second" is safe (the solve is sub-millisecond; the on-screen
+   animation is about 300 ms). Don't quote a hard "400 ms" you can't reproduce
+   on demand.
