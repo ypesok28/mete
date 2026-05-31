@@ -84,9 +84,8 @@ export function HelpTip({ text }: { text: string }) {
       <TooltipTrigger asChild>
         <button
           type="button"
-          tabIndex={-1}
           aria-label="What is this?"
-          className="grid size-3.5 shrink-0 cursor-default place-items-center rounded-full text-ink-faint transition-colors hover:text-gate"
+          className="grid size-3.5 shrink-0 cursor-help place-items-center rounded-full text-ink-faint transition-colors hover:text-gate"
         >
           <Info className="size-3" />
         </button>
@@ -104,7 +103,12 @@ function SourceChip({ tag, citation }: { tag: string; citation: string }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span className="cursor-default rounded-[5px] border border-line bg-base px-1.5 py-[1px] font-mono text-[8.5px] uppercase tracking-tag text-ink-mute transition-colors hover:border-gate/40 hover:bg-gate-wash hover:text-gate">
+        <span
+          role="button"
+          tabIndex={0}
+          aria-label={`Source: ${tag}`}
+          className="cursor-help rounded-[5px] border border-line bg-base px-1.5 py-[1px] font-mono text-[8.5px] uppercase tracking-tag text-ink-mute transition-colors hover:border-gate/40 hover:bg-gate-wash hover:text-gate"
+        >
           {tag}
         </span>
       </TooltipTrigger>
@@ -124,8 +128,8 @@ export function ColumnHeader({ metaKey }: { metaKey: string }) {
       <TooltipTrigger asChild>
         <button
           type="button"
-          tabIndex={-1}
-          className="flex cursor-default flex-col items-center leading-none"
+          aria-label={m.help ? `${m.label} — what is this?` : m.label}
+          className="flex cursor-help flex-col items-center leading-none"
         >
           <span className="text-[9.5px] font-semibold text-ink-mute">{m.label}</span>
           {m.unit ? (
@@ -170,7 +174,6 @@ function StepperInput({
       >
         <button
           type="button"
-          tabIndex={-1}
           aria-label="decrease"
           onClick={() => bump(-1)}
           className="grid h-7 w-6 cursor-pointer place-items-center rounded-l-lg text-ink-mute transition-colors hover:bg-surface-3 hover:text-ink"
@@ -189,7 +192,6 @@ function StepperInput({
         />
         <button
           type="button"
-          tabIndex={-1}
           aria-label="increase"
           onClick={() => bump(1)}
           className="grid h-7 w-6 cursor-pointer place-items-center rounded-r-lg text-ink-mute transition-colors hover:bg-surface-3 hover:text-ink"

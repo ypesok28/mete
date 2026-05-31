@@ -13,9 +13,11 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
+import { Check, Clock, ShieldAlert, type LucideIcon } from "lucide-react";
 import type { SolveResponse, BuildResult, RepairResult, RepairItem, Target, Tier } from "@contract";
 import { AirframeIcon, TIER_SIZE } from "@/components/AirframeIcon";
 import { Bottomline } from "@/components/Bottomline";
+import { HelpTip } from "@/components/Field";
 import { isBuildResult } from "@/lib/guards";
 import { reasonTheme } from "@/lib/reasonTheme";
 import { buildSituation } from "@/lib/insight";
@@ -67,8 +69,9 @@ export function DecisionZone({ response, repairItems, targets, tiers }: Decision
   const build = isBuildResult(response);
   const infeasible = build && !response.feasible;
 
-  // The plain-language bottom line: the limiting factor + the lever to do better.
-  const situation = useMemo(() => buildSituation(response), [response]);
+  // The plain-language bottom line: the limiting factor + the lever to do better. repairItems
+  // lets the repair path name the next deferred part's cost instead of a misleading "to spare".
+  const situation = useMemo(() => buildSituation(response, repairItems), [response, repairItems]);
 
   return (
     <div className="stage-field relative flex h-full min-h-0 flex-col overflow-hidden">
@@ -379,14 +382,20 @@ function VerdictStage({ result, reduce }: { result: BuildResult; reduce: boolean
 }
 
 // ── REPAIR stage — the three buckets ─────────────────────────────────
+// Order matches the solver headline ("PRINT … · DEFER · SAFETY-HOLD"). Each bucket carries its
+// own one-line definition (note) and a non-color glyph (Icon) so the meaning is legible without
+// crossing to a separate legend and without relying on hue alone.
 const BUCKET_META: {
   key: "print_now" | "cant_print_safety" | "defer";
   title: string;
   tone: "go" | "hold" | "defer";
+  Icon: LucideIcon;
+  note: string;
+  empty: string;
 }[] = [
-  { key: "print_now", title: "Print now", tone: "go" },
-  { key: "cant_print_safety", title: "Safety hold", tone: "hold" },
-  { key: "defer", title: "Defer", tone: "defer" },
+  { key: "print_now", title: "Print now", tone: "go", Icon: Check, note: "highest value within budget", empty: "None selected" },
+  { key: "defer", title: "Defer", tone: "defer", Icon: Clock, note: "budget bound it out", empty: "None deferred" },
+  { key: "cant_print_safety", title: "Safety hold", tone: "hold", Icon: ShieldAlert, note: "needs sign-off to print", empty: "None held" },
 ];
 
 function RepairStage({
@@ -426,40 +435,43 @@ function RepairStage({
           <span className="mono text-[10px] uppercase tracking-label text-ink-mute">
             repair triage
           </span>
-          <h1 className="text-balance text-center font-bold text-display-md tracking-tight text-ink">
-            {result.headline}
-          </h1>
+          <Headline text={result.headline} accentHex={accentHex} />
         </motion.div>
       </AnimatePresence>
 
-      <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-3">
-        {BUCKET_META.map(({ key, title, tone }) => {
+      <div className="grid w-full grid-cols-1 items-start gap-3 sm:grid-cols-3">
+        {BUCKET_META.map(({ key, title, tone, Icon, note, empty }) => {
           const ids = result.buckets[key];
           const color = toneHex(tone);
           return (
             <div
               key={key}
-              className="flex min-h-[200px] flex-col overflow-hidden rounded-xl bg-surface shadow-card"
+              className="flex min-h-[112px] flex-col overflow-hidden rounded-xl bg-surface shadow-card"
             >
               <div
-                className="flex items-center justify-between px-3 py-2.5"
+                className="px-3 py-2"
                 style={{
                   borderBottom: `1px solid ${color}2e`,
                   background: `${color}0f`,
                 }}
               >
-                <span
-                  className="mono text-[10px] font-semibold uppercase tracking-tag"
-                  style={{ color }}
-                >
-                  {title}
-                </span>
-                <span
-                  className="mono grid h-5 min-w-5 place-items-center rounded-full px-1.5 text-[11px] font-bold"
-                  style={{ color, background: `${color}1f` }}
-                >
-                  {ids.length}
-                </span>
+                <div className="flex items-center justify-between">
+                  <span
+                    className="mono flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-tag"
+                    style={{ color }}
+                  >
+                    <Icon className="size-3" strokeWidth={2.5} aria-hidden />
+                    {title}
+                  </span>
+                  <span
+                    className="mono grid h-5 min-w-5 place-items-center rounded-full px-1.5 text-[11px] font-bold"
+                    style={{ color, background: `${color}1f` }}
+                    aria-label={`${title}: ${ids.length}`}
+                  >
+                    {ids.length}
+                  </span>
+                </div>
+                <p className="mt-1 text-[10px] leading-tight text-ink-mute">{note}</p>
               </div>
               <ul className="flex flex-1 flex-col gap-1.5 p-2.5">
                 <AnimatePresence mode="popLayout">
@@ -478,15 +490,15 @@ function RepairStage({
                         <div className="text-[12px] font-medium text-ink">{it?.name ?? id}</div>
                         <div className="mono mt-0.5 flex items-center justify-between text-[9.5px] text-ink-faint">
                           <span className="tracking-tag">{id}</span>
-                          <span style={{ color }}>{it ? `val ${it.mission_value}` : ""}</span>
+                          <span style={{ color }}>{it ? `${it.mission_value} pts` : ""}</span>
                         </div>
                       </motion.li>
                     );
                   })}
                 </AnimatePresence>
                 {ids.length === 0 ? (
-                  <li className="mono grid flex-1 place-items-center text-[11px] text-ink-faint">
-                    —
+                  <li className="mono grid flex-1 place-items-center py-2 text-[10px] uppercase tracking-tag text-ink-faint">
+                    {empty}
                   </li>
                 ) : null}
               </ul>
@@ -496,8 +508,9 @@ function RepairStage({
       </div>
 
       <div className="flex items-center gap-3.5 rounded-lg bg-surface px-5 py-2.5 shadow-card">
-        <span className="mono text-[9px] uppercase tracking-label text-ink-mute">
+        <span className="mono flex items-center gap-1.5 text-[9px] uppercase tracking-label text-ink-mute">
           Mission value printed
+          <HelpTip text="Mission value = the operational readiness each repair restores (operator-set, 1–10 pts). The denominator is total printable value; safety-held parts are excluded pending sign-off." />
         </span>
         <span className="flex items-baseline gap-1">
           <span className="mono text-[22px] font-bold leading-none" style={{ color: accentHex }}>

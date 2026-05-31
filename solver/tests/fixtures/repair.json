@@ -15,7 +15,7 @@
       { "id": "5855-01-633-2271", "name": "Camera gimbal bracket",  "material_class": "CF_NYLON", "feedstock_g": 300, "energy_wh": 95,  "envelope_max_mm": 180, "mission_value": 8,  "safety_critical": false },
       { "id": "6140-01-487-5562", "name": "Battery tray",           "material_class": "CF_NYLON", "feedstock_g": 480, "energy_wh": 140, "envelope_max_mm": 260, "mission_value": 5,  "safety_critical": false },
       { "id": "1680-01-359-8104", "name": "Sensor housing clip",    "material_class": "CF_NYLON", "feedstock_g": 540, "energy_wh": 165, "envelope_max_mm": 200, "mission_value": 3,  "safety_critical": false },
-      { "id": "1615-01-204-7793", "name": "Main rotor hub",         "material_class": "CF_NYLON", "feedstock_g": 180, "energy_wh": 55,  "envelope_max_mm": 150, "mission_value": 10, "safety_critical": true }
+      { "id": "1615-01-204-7793", "name": "UAV rotor hub",          "material_class": "CF_NYLON", "feedstock_g": 180, "energy_wh": 55,  "envelope_max_mm": 150, "mission_value": 10, "safety_critical": true }
     ]
   },
   "expected_response": {

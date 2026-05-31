@@ -13,6 +13,7 @@ import type {
   SolveResponse,
   BuildResult,
   RepairResult,
+  RepairItem,
   BindingReason,
   MaterialClass,
 } from "@contract";
@@ -145,9 +146,9 @@ function headroom(r: BuildResult): string {
   return `${fmt(Math.max(0, f))} g · ${fmt(Math.max(0, h))} h · ${fmt(Math.max(0, e))} Wh free`;
 }
 
-export function buildSituation(response: SolveResponse): Situation {
+export function buildSituation(response: SolveResponse, repairItems?: RepairItem[]): Situation {
   if (isBuildResult(response)) return situationForBuild(response);
-  return situationForRepair(response as RepairResult);
+  return situationForRepair(response as RepairResult, repairItems);
 }
 
 function situationForBuild(r: BuildResult): Situation {
@@ -241,7 +242,24 @@ function situationForBuild(r: BuildResult): Situation {
   return { ...base, feasible: true, limit, lever, actionable: false };
 }
 
-function situationForRepair(r: RepairResult): Situation {
+// The cheapest deferred repair on the binding dimension — the "next part" an operator would
+// add if the budget cleared. Lets us replace a misleading "X to spare" (slack on a binding
+// resource reads as a self-contradiction) with the honest gap: "next repair needs Y".
+function nextDeferredCost(r: RepairResult, items: RepairItem[], dim: BudgetDim): number | null {
+  const costOf = (it: RepairItem): number | null =>
+    dim === "FEEDSTOCK" ? it.feedstock_g : dim === "ENERGY" ? it.energy_wh : null;
+  let best: number | null = null;
+  for (const id of r.buckets.defer) {
+    const it = items.find((x) => x.id === id);
+    if (!it) continue;
+    const c = costOf(it);
+    if (c == null) return null; // HOURS isn't a direct RepairItem field — skip the gap line
+    if (best == null || c < best) best = c;
+  }
+  return best;
+}
+
+function situationForRepair(r: RepairResult, repairItems?: RepairItem[]): Situation {
   const cls = reasonClass(r.binding_reason, r.feasible);
   const reason = r.binding_reason;
   const printed = r.buckets.print_now.length;
@@ -254,11 +272,18 @@ function situationForRepair(r: RepairResult): Situation {
   if (isBudgetDim(reason)) {
     const d = dimInfo(r, reason);
     const spare = Math.max(0, d.total - d.used);
+    // Never show bare "to spare" on the binding row — name the gap instead, so "feedstock is
+    // the limit" and "you have headroom" stop appearing to contradict each other.
+    const nextCost = repairItems ? nextDeferredCost(r, repairItems, reason) : null;
+    const metric =
+      nextCost != null && nextCost > spare
+        ? `${fmt(d.used)} / ${fmt(d.total)} ${d.unit} used · next repair needs ${fmt(nextCost)} ${d.unit}`
+        : `${fmt(d.used)} / ${fmt(d.total)} ${d.unit} used`;
     limit = {
       kicker: "LIMITED BY",
       title: d.label,
       detail: REASON_TEXT[reason],
-      metric: `${fmt(d.used)} / ${fmt(d.total)} ${d.unit} used · ${fmt(spare)} ${d.unit} to spare`,
+      metric,
     };
   } else {
     limit = {

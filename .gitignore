@@ -39,10 +39,10 @@ Thumbs.db
 # Brand design mockups (keep brand/assets/ — the real SVGs — tracked)
 /brand/*.html
 
-# Root-level planning notes & captures
-/snap-presets.md
-/tracks.md
-/warroom_promt.md
+# Root-level planning / pitch / submission docs — only README.md is published.
+# (root-anchored, so nested docs like frontend/LANDING.md are unaffected)
+/*.md
+!/README.md
 /*.pdf
 /*.png
 /*.jpg

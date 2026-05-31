@@ -34,8 +34,8 @@ const config: Config = {
         // ── text (cool near-black inks) ──
         ink: "#1B1E24", // headline / key figures
         "ink-soft": "#414650", // labels
-        "ink-mute": "#717783", // tags, secondary meta
-        "ink-faint": "#A7ADB7", // grid, inert garnish
+        "ink-mute": "#5C616C", // tags, secondary meta — darkened to clear WCAG AA (~5:1 on white)
+        "ink-faint": "#80868F", // grid, inert garnish — darkened so small meta on it stays legible
 
         // ── reason classes (muted instrument inks — none neon, none default-blue) ──
         gate: "#9A6312", // HERO: an exclusion forced the chosen tier (RANGE/PAYLOAD/WIND…)

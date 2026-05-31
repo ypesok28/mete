@@ -149,8 +149,12 @@
     background-clip: padding-box;
   }
 
+  /* A real, visible keyboard focus ring (was `outline: none`, which left keyboard users with no
+     focus indicator on the mode picker, menu items, links, etc.). Uses the bronze --ring token. */
   :focus-visible {
-    outline: none;
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 2px;
   }
 }
 

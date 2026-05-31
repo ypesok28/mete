@@ -52,7 +52,7 @@
     },
     {
       "id": "1615-01-204-7793",
-      "name": "Main rotor hub",
+      "name": "UAV rotor hub",
       "material_class": "CF_NYLON",
       "feedstock_g": 180,
       "energy_wh": 55,

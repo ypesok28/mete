@@ -55,9 +55,7 @@ export function ReadoutZone({ response, bindingReason }: ReadoutZoneProps) {
         <div className="flex min-h-full flex-col divide-y divide-line-soft">
           {isBuildResult(response) ? (
             <BuildReadout result={response} accentHex={theme.hex} />
-          ) : (
-            <RepairReadout />
-          )}
+          ) : null}
 
           <BudgetBars response={response} accentHex={theme.hex} />
         </div>
@@ -198,38 +196,9 @@ function BuildReadout({ result, accentHex }: { result: BuildResult; accentHex: s
 }
 
 // Repair mode has no per-tier / per-target read-out (the engine triages items, not airframes),
-// so the right rail carries a compact "how triage works" evidence card instead of a barren column.
-function RepairReadout() {
-  const legend: { tone: string; label: string; note: string }[] = [
-    { tone: "#3C7551", label: "Print now", note: "selected — max value within budget + gates" },
-    { tone: "#AD4528", label: "Safety hold", note: "safety-critical or a hard gate fails" },
-    { tone: "#857D72", label: "Defer", note: "eligible, but budget bound it out" },
-  ];
-  return (
-    <Section>
-      <SectionLabel hint="how triage sorts">Buckets</SectionLabel>
-      <div className="flex flex-col gap-2.5">
-        {legend.map((l) => (
-          <div key={l.label} className="flex items-start gap-2.5">
-            <span
-              className="mt-[3px] size-2.5 shrink-0 rounded-full"
-              style={{ background: l.tone }}
-            />
-            <div className="min-w-0">
-              <span
-                className="mono text-[11px] font-semibold uppercase tracking-tag"
-                style={{ color: l.tone }}
-              >
-                {l.label}
-              </span>
-              <p className="text-[11.5px] leading-snug text-ink-mute">{l.note}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </Section>
-  );
-}
+// and the bucket definitions now live under each bucket header in the decision stage — so the
+// repair right rail leads straight with the Budget bars (the actual "why 4/1/1" evidence)
+// rather than restating the bucket legend a second time.
 
 function Spec({ label, value }: { label: string; value: number }) {
   return (
