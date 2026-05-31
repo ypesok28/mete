@@ -1,0 +1,26 @@
+# Render Blueprint — deploys the METE (FORGE-MIX) OR-Tools solver as a web service.
+#
+# Why this exists: the frontend is a static export on Vercel and the browser calls a
+# same-origin `fetch("/solve")`. Vercel proxies that POST to THIS service via a rewrite
+# in frontend/vercel.json, so the browser never sees a cross-origin request (no CORS).
+# This service answers POST /solve only; the static UI lives on Vercel.
+#
+# To deploy: Render Dashboard → New → Blueprint → connect the `ypesok28/mete` repo.
+# Render reads this file and provisions the service automatically.
+services:
+  - type: web
+    name: mete-solver
+    runtime: python
+    # The solver lives in solver/. Build + start commands run from this subdir, which is
+    # what main.py's sys.path setup expects (`from contracts import ...`, `from solver import solve`).
+    rootDir: solver
+    plan: free
+    region: oregon
+    # Pin Python to a version with a prebuilt OR-Tools 9.14 wheel (verified locally on 3.12/3.13).
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+    buildCommand: pip install -r requirements.txt
+    # Single worker = the determinism guarantee from main.py (no parallel nondeterminism).
+    # $PORT is injected by Render; bind 0.0.0.0 so the platform can reach it.
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --workers 1
