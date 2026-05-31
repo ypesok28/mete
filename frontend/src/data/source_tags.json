@@ -1,0 +1,13 @@
+{
+  "tags": {
+    "deposition_rate_g_per_hr": { "tag": "SEEDED·CITED", "citation": "high-flow / large-nozzle CF-nylon FDM deposition (~150 g/hr)" },
+    "energy_wh":      { "tag": "SEEDED·CITED", "citation": "LiPo specific energy ~150–250 Wh/kg" },
+    "payload_cap_g":  { "tag": "SEEDED·CITED", "citation": "DoD Group 1 (0–20 lb); multirotor/fixed-wing payload fraction 15–35%" },
+    "mtow_g":         { "tag": "SEEDED·CITED", "citation": "DoD Group 1 band (under 20 lb)" },
+    "feedstock_g":    { "tag": "SEEDED", "citation": "plausible class-typical printed structural mass" },
+    "range_km":       { "tag": "SEEDED", "citation": "class-typical" },
+    "wind_kt":        { "tag": "SEEDED", "citation": "class-typical" },
+    "repair_nsn":     { "tag": "SEEDED", "citation": "realistic NSN format — NOT a live PUB LOG feed" }
+  },
+  "screen_message": "This is a frontier built on cited, editable assumptions — not an oracle. Change any number and watch it re-solve."
+}

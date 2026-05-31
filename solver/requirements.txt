@@ -1,0 +1,12 @@
+# FORGE-MIX solver — pinned for the no-fail-live determinism guarantee (05 §S2/§S6).
+# OR-Tools is the load-bearing pin: determinism is tied to a fixed solver build.
+# Network is fine at install time; the demo runs OFFLINE — no runtime network calls.
+ortools==9.14.6206
+pydantic==2.13.4
+pytest==8.4.2
+
+# Service wrap (05 §S2/§S3): the Pydantic models ARE the 04 contract — FastAPI validates
+# the request at the boundary (malformed -> 422, never reaching the solver). uvicorn is the
+# localhost ASGI host; the demo runs it single-worker (05 §S6 determinism, see main.py).
+fastapi==0.115.14
+uvicorn[standard]==0.32.1

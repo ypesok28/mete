@@ -1,0 +1,281 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@config "../tailwind.config.ts";
+
+/* FORGE-MIX · "Forward-Edge Operations Console" base layer (Tailwind v4 + shadcn/radix-nova).
+   A calm, premium, LIGHT defense surface. One continuous workspace — depth from soft shadows
+   and hairlines, never neon. The data is the only thing that's allowed to be loud.
+
+   ALL color is offline/self-hosted: self-hosted IBM Plex via next/font/local, zero CDN. */
+
+/* shadcn semantic tokens → Tailwind utilities (bg-background, text-muted-foreground, …).
+   These read the CSS variables defined in :root below. */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* Light console. Cool-neutral gray, very low chroma → a refined graphite-on-paper surface that
+   lets the single warm bronze accent pop (cool-on-warm is what reads "designed"). --primary +
+   --ring carry the bronze accent so primary actions and focus rings read on-brand. */
+:root {
+  color-scheme: light;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --background: oklch(0.975 0.003 260);
+  --foreground: oklch(0.24 0.012 262);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.012 262);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.012 262);
+  --primary: oklch(0.52 0.1 70); /* bronze — primary actions read on-brand */
+  --primary-foreground: oklch(0.99 0.003 85);
+  --secondary: oklch(0.965 0.004 260);
+  --secondary-foreground: oklch(0.32 0.012 262);
+  --muted: oklch(0.965 0.004 260);
+  --muted-foreground: oklch(0.52 0.013 262);
+  --accent: oklch(0.955 0.005 260);
+  --accent-foreground: oklch(0.32 0.012 262);
+  --destructive: oklch(0.52 0.16 36); /* terracotta */
+  --destructive-foreground: oklch(0.99 0.003 85);
+  --border: oklch(0.24 0.01 262 / 11%);
+  --input: oklch(0.24 0.01 262 / 14%);
+  --ring: oklch(0.52 0.1 70); /* bronze focus ring */
+
+  --sidebar: oklch(0.992 0.002 260);
+  --sidebar-foreground: oklch(0.24 0.012 262);
+  --sidebar-primary: oklch(0.52 0.1 70);
+  --sidebar-primary-foreground: oklch(0.99 0.003 85);
+  --sidebar-accent: oklch(0.955 0.005 260);
+  --sidebar-accent-foreground: oklch(0.32 0.012 262);
+  --sidebar-border: oklch(0.24 0.01 262 / 10%);
+  --sidebar-ring: oklch(0.52 0.1 70);
+
+  --radius: 0.7rem;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  /* Smooth anchor scrolling on the marketing landing page; the console locks document scroll so
+     this is inert there. Disabled under reduced-motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-canvas text-foreground;
+  }
+
+  /* Every number reads as an instrument figure — fixed-width, non-reflowing digits. */
+  .mono,
+  .tabular {
+    font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "zero" 1;
+  }
+
+  /* Strip native number-input spinners; keep the crafted chrome. */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  /* Slender, rounded, recessed scrollbars — never a "web page" scrollbar. */
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: #d4d8df;
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: #c0c5ce;
+    background-clip: padding-box;
+  }
+
+  :focus-visible {
+    outline: none;
+  }
+}
+
+@layer components {
+  /* The decision stage backdrop — a softly recessed warm well + a barely-there dot lattice.
+     Reads as a calm "viewport" the answer sits in, not graph paper. */
+  .stage-field {
+    /* SOFTENED WELL (B): lifted from #edeff2 → #f4f6f9 so the step down from the white rails is
+       gentle — the center reads as barely-recessed, not a foreign surface. Corner gradients
+       toned to match. */
+    background:
+      radial-gradient(130% 90% at 50% 0%, rgba(154, 99, 18, 0.022), transparent 62%),
+      radial-gradient(120% 120% at 50% 100%, rgba(27, 29, 36, 0.016), transparent 72%),
+      #f4f6f9;
+    position: relative;
+  }
+  .stage-field::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    /* DE-SPOTLIGHTED LATTICE (B): fainter dots + a wider, gentler mask so the texture stays even
+       across the field instead of concentrating into a bright center and emptying the edges —
+       which is what made the well read as a spotlight on a void. */
+    background-image: radial-gradient(circle at center, rgba(27, 29, 36, 0.03) 1px, transparent 1.4px);
+    background-size: 32px 32px;
+    background-position: center center;
+    -webkit-mask-image: radial-gradient(140% 130% at 50% 42%, #000 55%, transparent 100%);
+    mask-image: radial-gradient(140% 130% at 50% 42%, #000 55%, transparent 100%);
+    opacity: 0.45;
+  }
+
+  /* RE-SOLVING scan-sweep — a soft bloom that crosses the stage once on a recompute.
+     Driven by the live reason color via the --sweep CSS var (set inline per render). */
+  .scan-sweep {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: inherit;
+    --sweep: 154, 99, 18;
+  }
+  .scan-sweep::after {
+    content: "";
+    position: absolute;
+    top: -10%;
+    bottom: -10%;
+    width: 38%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(var(--sweep), 0.1) 45%,
+      rgba(var(--sweep), 0.18) 50%,
+      rgba(var(--sweep), 0.1) 55%,
+      transparent
+    );
+    filter: blur(2px);
+    animation: scan-sweep 260ms var(--ease) forwards;
+  }
+  @keyframes scan-sweep {
+    from {
+      left: -42%;
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    88% {
+      opacity: 1;
+    }
+    to {
+      left: 104%;
+      opacity: 0;
+    }
+  }
+
+  /* Edited-input registration flash — a quick, soft bronze ring ("your input registered"). */
+  .input-flash {
+    animation: input-flash 460ms var(--ease);
+  }
+  @keyframes input-flash {
+    0% {
+      box-shadow: 0 0 0 0 rgba(154, 99, 18, 0);
+      border-color: rgba(154, 99, 18, 0.85);
+    }
+    28% {
+      box-shadow: 0 0 0 3px rgba(154, 99, 18, 0.18);
+      border-color: rgba(154, 99, 18, 0.85);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(154, 99, 18, 0);
+    }
+  }
+
+  /* A gentle live-pulse dot for the node status (breathing presence indicator). */
+  .pulse-dot {
+    position: relative;
+  }
+  .pulse-dot::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 999px;
+    background: currentColor;
+    opacity: 0.4;
+    animation: pulse-ring 2.4s var(--ease) infinite;
+  }
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.7);
+      opacity: 0.45;
+    }
+    70%,
+    100% {
+      transform: scale(2.1);
+      opacity: 0;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scan-sweep::after,
+  .input-flash,
+  .pulse-dot::after {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="METE allocation-bars mark">
+  <!-- Transparent background. Side bars use currentColor when inlined; middle bar = brand amber. -->
+  <rect x="44"  y="112" width="26" height="44" rx="6" fill="currentColor"/>
+  <rect x="87"  y="62"  width="26" height="94" rx="6" fill="#E79A3C"/>
+  <rect x="130" y="92"  width="26" height="64" rx="6" fill="currentColor"/>
+</svg>

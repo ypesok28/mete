@@ -1,0 +1,70 @@
+{
+  "presets": [
+    {
+      "id": "WIDE_AREA_RECON",
+      "name": "WIDE-AREA RECON",
+      "mode": "build",
+      "description": "8 soft contacts — cheapest eligible tier until feedstock binds (5/8).",
+      "targets": [
+        { "id": "T1", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T2", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T3", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T4", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T5", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T6", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T7", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T8", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 }
+      ]
+    },
+    {
+      "id": "DEEP_STRIKE",
+      "name": "DEEP STRIKE",
+      "mode": "build",
+      "description": "1 hardened high-value target — only STRIKE-L clears range + payload (1/1, RANGE).",
+      "targets": [
+        { "id": "HVT", "standoff_km": 120, "payload_g": 1200, "weather_kt": 25, "value": 10 }
+      ]
+    },
+    {
+      "id": "MIXED",
+      "name": "MIXED — recon + hardened",
+      "mode": "build",
+      "description": "1 HVT + 5 soft contacts — mixed build: 1 STRIKE-L for the HVT + 1 SCOUT-S (value 11/15).",
+      "targets": [
+        { "id": "HVT", "standoff_km": 120, "payload_g": 1200, "weather_kt": 25, "value": 10 },
+        { "id": "T1", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T2", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T3", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T4", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T5", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 }
+      ]
+    },
+    {
+      "id": "ESCALATION_B",
+      "name": "ESCALATION — energy rationed",
+      "mode": "build",
+      "description": "DEEP STRIKE with energy dropped to 300 Wh — STRIKE needs 380 Wh, unaffordable (CANNOT BUILD, ENERGY).",
+      "targets": [
+        { "id": "HVT", "standoff_km": 120, "payload_g": 1200, "weather_kt": 25, "value": 10 }
+      ],
+      "budget_overrides": { "energy_wh": 300 }
+    },
+    {
+      "id": "REROUTE",
+      "name": "REROUTE — SCOUT kit out",
+      "mode": "build",
+      "description": "8 soft contacts with the SCOUT-S parts-kit unavailable — solver reroutes to ISR-M (4/8, FEEDSTOCK).",
+      "targets": [
+        { "id": "T1", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T2", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T3", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T4", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T5", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T6", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T7", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+        { "id": "T8", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 }
+      ],
+      "node_overrides": { "components_on_hand": { "SCOUT_S": false } }
+    }
+  ]
+}

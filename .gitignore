@@ -1,0 +1,49 @@
+# ─────────────────────────────────────────────────────────────
+# Build artifacts & dependencies (regenerated — never committed)
+# ─────────────────────────────────────────────────────────────
+
+# Node / Next.js (frontend/)
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+.vercel/
+
+# Python (solver/)
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.log
+
+# ─────────────────────────────────────────────────────────────
+# Planning & process material — kept LOCALLY, not published.
+# (root-anchored so it never touches files inside the code dirs)
+# ─────────────────────────────────────────────────────────────
+
+# War-room brainstorming, decisions, and build-process workspace
+/dlc/
+/warroom/
+
+# Tooling / capture artifacts
+/.playwright-mcp/
+/.superpowers/
+
+# Brand design mockups (keep brand/assets/ — the real SVGs — tracked)
+/brand/*.html
+
+# Root-level planning notes & captures
+/snap-presets.md
+/tracks.md
+/warroom_promt.md
+/*.pdf
+/*.png
+/*.jpg
+/*.jpeg

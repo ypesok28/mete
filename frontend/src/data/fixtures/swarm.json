@@ -1,0 +1,53 @@
+{
+  "name": "SWARM",
+  "description": "8 identical soft contacts, all tiers eligible. Cheapest eligible tier (SCOUT-S) is feedstock-capped at 5 (5x380=1900<=2000; a 6th=2280>2000). 5/8 covered, 3 unserved -> binding FEEDSTOCK. The many-small baseline.",
+  "request": {
+    "mode": "build",
+    "deposition_rate_g_per_hr": 150,
+    "budget": { "feedstock_g": { "CF_NYLON": 2000 }, "printer_hours": 18, "energy_wh": 900 },
+    "node": {
+      "printer_envelope_mm": { "x": 300, "y": 300, "z": 400 },
+      "components_on_hand": { "SCOUT_S": true, "ISR_M": true, "STRIKE_L": true }
+    },
+    "tiers": [
+      { "id": "SCOUT_S",  "name": "SCOUT-S",  "role": "micro recon quad",    "material_class": "CF_NYLON", "feedstock_g": 380,  "energy_wh": 40,  "payload_cap_g": 150,  "range_km": 5,   "wind_kt": 15, "envelope_max_mm": 220, "mtow_g": 1200 },
+      { "id": "ISR_M",    "name": "ISR-M",    "role": "small fixed-wing ISR", "material_class": "CF_NYLON", "feedstock_g": 450,  "energy_wh": 150, "payload_cap_g": 400,  "range_km": 30,  "wind_kt": 22, "envelope_max_mm": 320, "mtow_g": 2500 },
+      { "id": "STRIKE_L", "name": "STRIKE-L", "role": "one-way attack",       "material_class": "CF_NYLON", "feedstock_g": 1400, "energy_wh": 380, "payload_cap_g": 1300, "range_km": 120, "wind_kt": 32, "envelope_max_mm": 380, "mtow_g": 4000 }
+    ],
+    "targets": [
+      { "id": "T1", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+      { "id": "T2", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+      { "id": "T3", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+      { "id": "T4", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+      { "id": "T5", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+      { "id": "T6", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+      { "id": "T7", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 },
+      { "id": "T8", "standoff_km": 3, "payload_g": 90, "weather_kt": 10, "value": 1 }
+    ]
+  },
+  "expected_response": {
+    "feasible": true,
+    "headline": "BUILD 5× SCOUT-S",
+    "binding_reason": "FEEDSTOCK",
+    "budget_total": { "feedstock_g": { "CF_NYLON": 2000 }, "printer_hours": 18, "energy_wh": 900 },
+    "budget_used": { "feedstock_g": { "CF_NYLON": 1900 }, "printer_hours": 12.67, "energy_wh": 200 },
+    "builds": { "SCOUT_S": 5 },
+    "coverage": { "covered": 5, "total": 8 },
+    "covered_value": 5,
+    "tier_status": [
+      { "tier_id": "SCOUT_S",  "built": 5, "derived_hours": 2.53, "unit_cost": { "feedstock_g": 380,  "printer_hours": 2.53, "energy_wh": 40 },  "eligible_target_ids": ["T1","T2","T3","T4","T5","T6","T7","T8"], "exclusion_reasons": [] },
+      { "tier_id": "ISR_M",    "built": 0, "derived_hours": 3.0,  "unit_cost": { "feedstock_g": 450,  "printer_hours": 3.0,  "energy_wh": 150 }, "eligible_target_ids": ["T1","T2","T3","T4","T5","T6","T7","T8"], "exclusion_reasons": [] },
+      { "tier_id": "STRIKE_L", "built": 0, "derived_hours": 9.33, "unit_cost": { "feedstock_g": 1400, "printer_hours": 9.33, "energy_wh": 380 }, "eligible_target_ids": ["T1","T2","T3","T4","T5","T6","T7","T8"], "exclusion_reasons": [] }
+    ],
+    "target_status": [
+      { "target_id": "T1", "covered": true,  "assigned_tier_id": "SCOUT_S" },
+      { "target_id": "T2", "covered": true,  "assigned_tier_id": "SCOUT_S" },
+      { "target_id": "T3", "covered": true,  "assigned_tier_id": "SCOUT_S" },
+      { "target_id": "T4", "covered": true,  "assigned_tier_id": "SCOUT_S" },
+      { "target_id": "T5", "covered": true,  "assigned_tier_id": "SCOUT_S" },
+      { "target_id": "T6", "covered": false, "assigned_tier_id": null },
+      { "target_id": "T7", "covered": false, "assigned_tier_id": null },
+      { "target_id": "T8", "covered": false, "assigned_tier_id": null }
+    ]
+  }
+}
